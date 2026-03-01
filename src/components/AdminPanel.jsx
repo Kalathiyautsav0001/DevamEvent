@@ -24,7 +24,7 @@ const AdminPanel = ({ onLogout }) => {
     const [editCategory, setEditCategory] = useState('');
     const [editMediaType, setEditMediaType] = useState('');
     const [showEditModal, setShowEditModal] = useState(false);
-    
+    const API_URL = process.env.REACT_APP_API_URL;
     const navigate = useNavigate();
 
     // ALL CATEGORIES INCLUDING FESTIVAL SECTION
@@ -105,14 +105,14 @@ const AdminPanel = ({ onLogout }) => {
             };
 
             if (activeTab === 'gallery') {
-                const response = await axios.get('http://localhost:5000/api/gallery');
+                const response = await axios.get(`${API_URL}/gallery`);
                 console.log('Fetched gallery data:', response.data);
                 setMediaItems(response.data);
             } else if (activeTab === 'testimonials') {
-                const response = await axios.get('http://localhost:5000/api/testimonials', config);
+                const response = await axios.get(`${API_URL}/testimonials`, config);
                 setTestimonials(response.data);
             } else if (activeTab === 'contacts') {
-                const response = await axios.get('http://localhost:5000/api/contact', config);
+                const response = await axios.get(`${API_URL}/contact`, config);
                 setContacts(response.data);
             }
         } catch (error) {
@@ -175,7 +175,7 @@ const AdminPanel = ({ onLogout }) => {
 
         try {
             const token = localStorage.getItem('adminToken');
-            const response = await axios.post('http://localhost:5000/api/gallery/upload', formData, {
+            const response = await axios.post(`${API_URL}/gallery/upload`, formData, {
                 headers: { 
                     'Content-Type': 'multipart/form-data',
                     'Authorization': `Bearer ${token}`
@@ -209,7 +209,7 @@ const AdminPanel = ({ onLogout }) => {
         try {
             const token = localStorage.getItem('adminToken');
             const response = await axios.put(
-                `http://localhost:5000/api/gallery/${editingItem._id}`,
+                `${API_URL}/gallery/${editingItem._id}`,
                 {
                     category: editCategory,
                     mediaType: editMediaType
@@ -239,7 +239,7 @@ const AdminPanel = ({ onLogout }) => {
         if (window.confirm('Are you sure you want to delete this item?')) {
             try {
                 const token = localStorage.getItem('adminToken');
-                await axios.delete(`http://localhost:5000/api/gallery/${id}`, {
+                await axios.delete(`${API_URL}/gallery/${id}`, {
                     headers: { Authorization: `Bearer ${token}` }
                 });
                 setMessage({ text: 'Item deleted successfully', type: 'success' });
@@ -254,7 +254,7 @@ const AdminPanel = ({ onLogout }) => {
     const handleApproveTestimonial = async (id) => {
         try {
             const token = localStorage.getItem('adminToken');
-            await axios.put(`http://localhost:5000/api/testimonials/${id}/approve`, {}, {
+            await axios.put(`${API_URL}/testimonials/${id}/approve`, {}, {
                 headers: { Authorization: `Bearer ${token}` }
             });
             setMessage({ text: 'Testimonial approved', type: 'success' });
@@ -269,7 +269,7 @@ const AdminPanel = ({ onLogout }) => {
         if (window.confirm('Are you sure you want to delete this testimonial?')) {
             try {
                 const token = localStorage.getItem('adminToken');
-                await axios.delete(`http://localhost:5000/api/testimonials/${id}`, {
+                await axios.delete(`${API_URL}/testimonials/${id}`, {
                     headers: { Authorization: `Bearer ${token}` }
                 });
                 setMessage({ text: 'Testimonial deleted', type: 'success' });
@@ -285,7 +285,7 @@ const AdminPanel = ({ onLogout }) => {
         if (window.confirm('Are you sure you want to delete this inquiry?')) {
             try {
                 const token = localStorage.getItem('adminToken');
-                await axios.delete(`http://localhost:5000/api/contact/${id}`, {
+                await axios.delete(`${API_URL}/contact/${id}`, {
                     headers: { Authorization: `Bearer ${token}` }
                 });
                 setMessage({ text: 'Inquiry deleted', type: 'success' });

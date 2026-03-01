@@ -11,10 +11,11 @@ const About = () => {
     useEffect(() => {
         fetchTopTestimonials();
     }, []);
-
+    const API_URL = process.env.REACT_APP_API_URL;
+    console.log(API_URL);
     const fetchTopTestimonials = async () => {
         try {
-            const response = await axios.get('http://localhost:5000/api/testimonials/approved');
+            const response = await axios.get(`${API_URL}/testimonials/approved`);
             // Get top 3 most recent testimonials
             const topThree = response.data.slice(0, 3);
             setTestimonials(topThree);

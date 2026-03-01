@@ -64,7 +64,7 @@ const Gallery = () => {
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState(null);
     const [selectedCategoryGroup, setSelectedCategoryGroup] = useState('all');
-
+    const API_URL = process.env.REACT_APP_API_URL;
     useEffect(() => {
         fetchPhotos();
     }, []);
@@ -87,7 +87,7 @@ const Gallery = () => {
     const fetchPhotos = async () => {
         try {
             setLoading(true);
-            const response = await axios.get('http://localhost:5000/api/gallery');
+            const response = await axios.get(`${API_URL}/gallery`);
             console.log('Fetched photos:', response.data);
             setPhotos(response.data);
             setError(null);

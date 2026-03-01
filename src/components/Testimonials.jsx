@@ -13,14 +13,14 @@ const Testimonials = () => {
     const [message, setMessage] = useState({ text: '', type: '' });
     const [loading, setLoading] = useState(true);
     const [activeFilter, setActiveFilter] = useState('all');
-
+    const API_URL = process.env.REACT_APP_API_URL;
     useEffect(() => {
         fetchTestimonials();
     }, []);
 
     const fetchTestimonials = async () => {
         try {
-            const response = await axios.get('http://localhost:5000/api/testimonials/approved');
+            const response = await axios.get(`${API_URL}/testimonials/approved`);
             setTestimonials(response.data);
             setLoading(false);
         } catch (error) {
@@ -73,7 +73,7 @@ const Testimonials = () => {
         }
 
         try {
-            const response = await axios.post('http://localhost:5000/api/testimonials', formData);
+            const response = await axios.post(`${API_URL}/testimonials`, formData);
             
             if (response.data.success) {
                 setMessage({ text: '✨ Thank you! Your review will be displayed after admin approval.', type: 'success' });

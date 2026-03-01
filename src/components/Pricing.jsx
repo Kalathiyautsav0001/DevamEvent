@@ -18,7 +18,7 @@ const Pricing = () => {
         const saved = localStorage.getItem('selectedPlans');
         return saved ? JSON.parse(saved) : [];
     });
-    
+    const API_URL = process.env.REACT_APP_API_URL;
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState(null);
     const [totalPrice, setTotalPrice] = useState(0);
@@ -96,12 +96,12 @@ const Pricing = () => {
         setError(null);
         try {
             const token = localStorage.getItem('adminToken');
-            let plansEndpoint = 'http://localhost:5000/api/pricing';
+            let plansEndpoint = `${API_URL}/pricing`;
             
             let plansData = [];
             if (token) {
                 try {
-                    const adminPlansRes = await axios.get('http://localhost:5000/api/pricing/admin', {
+                    const adminPlansRes = await axios.get(`${API_URL}/pricing/admin`, {
                         headers: { Authorization: `Bearer ${token}` }
                     });
                     plansData = adminPlansRes.data;
@@ -124,7 +124,7 @@ const Pricing = () => {
                 setPlans(plansData.filter(plan => plan.category === activeCategory));
             }
             
-            const decorationRes = await axios.get('http://localhost:5000/api/decoration');
+            const decorationRes = await axios.get(`${API_URL}/decoration`);
             setDecorationItems(decorationRes.data);
             
         } catch (error) {
@@ -467,6 +467,7 @@ const Pricing = () => {
             return;
         }
         setShowBookingForm(true);
+        setShowSummary(false);
     };
 
     const handleSubmitBooking = (e) => {

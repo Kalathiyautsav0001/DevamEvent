@@ -1,8 +1,10 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
 import './Services.css';
 
 const Services = () => {
+    const [activeCategory, setActiveCategory] = useState('all');
+    
     const services = [
         // Wedding Category
         {
@@ -269,18 +271,23 @@ const Services = () => {
 
     // Group services by category
     const categories = [
-        { id: 'wedding', name: 'Wedding & Pre-Wedding', icon: 'fas fa-heart', color: '#FF6B6B' },
-        { id: 'corporate', name: 'Corporate Events', icon: 'fas fa-briefcase', color: '#4A90E2' },
-        { id: 'birthday', name: 'Birthday Celebrations', icon: 'fas fa-birthday-cake', color: '#FFB347' },
-        { id: 'baby', name: 'Baby Showers & Kids', icon: 'fas fa-child', color: '#A8E6CF' },
-        { id: 'anniversary', name: 'Anniversary Events', icon: 'fas fa-heart', color: '#FF8E53' },
-        { id: 'festival', name: 'Festival Celebrations', icon: 'fas fa-festival', color: '#C5A059' },
-        { id: 'additional', name: 'Additional Services', icon: 'fas fa-cog', color: '#6C5CE7' }
+        { id: 'wedding', name: 'Wedding & Pre-Wedding', icon: 'fas fa-heart', color: '#FF6B6B', description: 'Make your dream wedding a reality with our comprehensive planning services' },
+        { id: 'corporate', name: 'Corporate Events', icon: 'fas fa-briefcase', color: '#4A90E2', description: 'Professional events that leave lasting impressions on your stakeholders' },
+        { id: 'birthday', name: 'Birthday Celebrations', icon: 'fas fa-birthday-cake', color: '#FFB347', description: 'Fun-filled birthday parties for all ages with creative themes' },
+        { id: 'baby', name: 'Baby Showers & Kids', icon: 'fas fa-child', color: '#A8E6CF', description: 'Celebrate the arrival of your little one with joy and style' },
+        { id: 'anniversary', name: 'Anniversary Events', icon: 'fas fa-heart', color: '#FF8E53', description: 'Honor your love story with elegant anniversary celebrations' },
+        { id: 'festival', name: 'Festival Celebrations', icon: 'fas fa-festival', color: '#C5A059', description: 'Vibrant festival parties that capture the spirit of celebration' },
+        { id: 'additional', name: 'Additional Services', icon: 'fas fa-cog', color: '#6C5CE7', description: 'Complete your event with our premium add-on services' }
     ];
 
     const getServicesByCategory = (categoryId) => {
         return services.filter(service => service.category === categoryId);
     };
+
+    // Filter services based on active category
+    const filteredServices = activeCategory === 'all' 
+        ? services 
+        : services.filter(service => service.category === activeCategory);
 
     return (
         <section className="services-section">
@@ -316,91 +323,164 @@ const Services = () => {
                     </p>
                 </div>
 
-                {/* Category Chips with Scroll Indicators */}
-                <div className="services-categories-wrapper">
-                    <div className="services-categories">
-                        {categories.map(category => (
-                            <a 
-                                href={`#${category.id}`} 
-                                key={category.id} 
-                                className="category-chip"
-                                style={{ '--category-color': category.color }}
-                            >
-                                <i className={category.icon}></i>
-                                <span>{category.name}</span>
-                            </a>
-                        ))}
-                    </div>
-                    {/* <div className="scroll-hint">
-                        <i className="fas fa-chevron-right"></i>
-                        <span>Scroll for more</span>
-                    </div> */}
+                {/* Category Filter Tabs */}
+                <div className="category-filter-tabs">
+                    <button 
+                        className={`filter-tab ${activeCategory === 'all' ? 'active' : ''}`}
+                        onClick={() => setActiveCategory('all')}
+                        style={{ '--tab-color': '#C5A059' }}
+                    >
+                        <i className="fas fa-th-large"></i>
+                        <span>All Services</span>
+                        <span className="tab-count">{services.length}</span>
+                    </button>
+                    {categories.map(category => (
+                        <button
+                            key={category.id}
+                            className={`filter-tab ${activeCategory === category.id ? 'active' : ''}`}
+                            onClick={() => setActiveCategory(category.id)}
+                            style={{ '--tab-color': category.color }}
+                        >
+                            <i className={category.icon}></i>
+                            <span>{category.name}</span>
+                            <span className="tab-count">{getServicesByCategory(category.id).length}</span>
+                        </button>
+                    ))}
                 </div>
 
-                {/* Services by Category */}
-                <div className="services-container">
-                    {categories.map(category => {
-                        const categoryServices = getServicesByCategory(category.id);
-                        if (categoryServices.length === 0) return null;
-                        
-                        return (
-                            <div key={category.id} id={category.id} className="category-section">
-                                <div className="category-header">
-                                    <h3 className="category-title" style={{ '--category-color': category.color }}>
-                                        <i className={category.icon}></i> 
-                                        <span>{category.name}</span>
-                                    </h3>
-                                    <div className="category-divider"></div>
-                                    <span className="category-count">{categoryServices.length} Services</span>
-                                </div>
-                                
-                                {/* Scrollable Cards Container */}
-                                <div className="cards-scroll-container">
-                                    <div className="cards-wrapper">
-                                        {categoryServices.map(service => (
-                                            <div className="service-card" key={service.id}>
-                                                <div className="service-image-wrapper">
-                                                    <img 
-                                                        src={service.image} 
-                                                        alt={service.title} 
-                                                        className="service-img" 
-                                                        loading="lazy"
-                                                        onError={(e) => {
-                                                            e.target.onerror = null;
-                                                            e.target.src = 'https://images.unsplash.com/photo-1511795409834-ef04bbd61622?w=400&h=300&fit=crop';
-                                                        }}
-                                                    />
-                                                    <div className="service-icon-circle">
-                                                        <i className={service.icon}></i>
-                                                    </div>
-                                                    <div className="service-category-tag" style={{ backgroundColor: category.color }}>
-                                                        <i className={category.icon}></i>
-                                                    </div>
-                                                </div>
-                                                <div className="service-content">
-                                                    <h3>{service.title}</h3>
-                                                    <p>{service.description}</p>
-                                                    
-                                                    {/* Two buttons side by side */}
-                                                    <div className="service-buttons">
-                                                        <Link to="/pricing" className="service-btn pricing-btn">
-                                                            <i className="fas fa-tag"></i>
-                                                            Pricing
-                                                        </Link>
-                                                        <Link to="/contact" className="service-btn inquire-btn">
-                                                            <i className="fas fa-envelope"></i>
-                                                            Inquire
-                                                        </Link>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        ))}
+                {/* Category Overview Cards */}
+                {activeCategory === 'all' && (
+                    <div className="category-overview-grid">
+                        {categories.map(category => {
+                            const categoryServices = getServicesByCategory(category.id);
+                            return (
+                                <div 
+                                    key={category.id} 
+                                    className="category-overview-card"
+                                    style={{ '--card-color': category.color }}
+                                    onClick={() => setActiveCategory(category.id)}
+                                >
+                                    <div className="overview-icon">
+                                        <i className={category.icon}></i>
+                                    </div>
+                                    <h3>{category.name}</h3>
+                                    <p>{category.description}</p>
+                                    <div className="overview-footer">
+                                        <span className="service-count">{categoryServices.length} Services</span>
+                                        <span className="view-link">
+                                            View Services <i className="fas fa-arrow-right"></i>
+                                        </span>
                                     </div>
                                 </div>
-                            </div>
-                        );
-                    })}
+                            );
+                        })}
+                    </div>
+                )}
+
+                {/* Services Grid */}
+                <div className="services-grid-container">
+                    <div className="services-grid">
+                        {filteredServices.map(service => {
+                            const category = categories.find(c => c.id === service.category);
+                            return (
+                                <div className="service-card-modern" key={service.id}>
+                                    <div className="service-card-inner">
+                                        <div className="service-front">
+                                            <div className="service-image-wrapper">
+                                                <img 
+                                                    src={service.image} 
+                                                    alt={service.title} 
+                                                    className="service-img"
+                                                    loading="lazy"
+                                                    onError={(e) => {
+                                                        e.target.onerror = null;
+                                                        e.target.src = 'https://images.unsplash.com/photo-1511795409834-ef04bbd61622?w=400&h=300&fit=crop';
+                                                    }}
+                                                />
+                                                <div className="service-category-badge" style={{ backgroundColor: category?.color }}>
+                                                    <i className={category?.icon}></i>
+                                                </div>
+                                            </div>
+                                            <div className="service-content-modern">
+                                                <div className="service-icon-wrapper" style={{ backgroundColor: category?.color }}>
+                                                    <i className={service.icon}></i>
+                                                </div>
+                                                <h3>{service.title}</h3>
+                                                <p className="service-description">{service.description}</p>
+                                                <div className="service-features">
+                                                    <span className="feature-tag">
+                                                        <i className="fas fa-check-circle"></i> Professional Team
+                                                    </span>
+                                                    <span className="feature-tag">
+                                                        <i className="fas fa-clock"></i> Flexible Timing
+                                                    </span>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div className="service-back" style={{ backgroundColor: category?.color }}>
+                                            <div className="back-content">
+                                                <h4>Why Choose This Service?</h4>
+                                                <ul className="back-features">
+                                                    <li><i className="fas fa-check"></i> Expert planning team</li>
+                                                    <li><i className="fas fa-check"></i> Customized packages</li>
+                                                    <li><i className="fas fa-check"></i> Premium vendors</li>
+                                                    <li><i className="fas fa-check"></i> 24/7 support</li>
+                                                </ul>
+                                                <div className="back-buttons">
+                                                    <Link to="/pricing" className="back-btn pricing-btn">
+                                                        <i className="fas fa-tag"></i> Pricing
+                                                    </Link>
+                                                    <Link to="/contact" className="back-btn inquire-btn">
+                                                        <i className="fas fa-envelope"></i> Inquire
+                                                    </Link>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            );
+                        })}
+                    </div>
                 </div>
+
+                {/* Featured Services Section */}
+                {/* {activeCategory === 'all' && (
+                    <div className="featured-services">
+                        <div className="featured-header">
+                            <h3>Most Popular Services</h3>
+                            <div className="featured-line"></div>
+                        </div>
+                        <div className="featured-grid">
+                            {services.filter(s => s.id <= 4).map(service => {
+                                const category = categories.find(c => c.id === service.category);
+                                return (
+                                    <div className="featured-card" key={service.id}>
+                                        <div className="featured-image">
+                                            <img src={service.image} alt={service.title} />
+                                            <div className="featured-overlay">
+                                                <span className="featured-badge" style={{ backgroundColor: category?.color }}>
+                                                    <i className={category?.icon}></i> {category?.name.split(' ')[0]}
+                                                </span>
+                                            </div>
+                                        </div>
+                                        <div className="featured-content">
+                                            <h4>{service.title}</h4>
+                                            <p>{service.description.substring(0, 60)}...</p>
+                                            <div className="featured-actions">
+                                                <Link to="/pricing" className="featured-btn pricing-btn">
+                                                    <i className="fas fa-tag"></i> Pricing
+                                                </Link>
+                                                <Link to="/contact" className="featured-btn inquire-btn">
+                                                    <i className="fas fa-envelope"></i> Inquire
+                                                </Link>
+                                            </div>
+                                        </div>
+                                    </div>
+                                );
+                            })}
+                        </div>
+                    </div>
+                )} */}
 
                 {/* Custom Packages Section */}
                 <div className="custom-packages">
@@ -422,14 +502,6 @@ const Services = () => {
                         </div>
                     </div>
                 </div>
-
-                {/* Floating Action Button for Quick Contact */}
-                {/* <div className="floating-action-btn">
-                    <Link to="/contact" className="fab-link">
-                        <i className="fas fa-headset"></i>
-                    </Link>
-                    <span className="fab-tooltip">Need Help?</span>
-                </div> */}
             </div>
         </section>
     );

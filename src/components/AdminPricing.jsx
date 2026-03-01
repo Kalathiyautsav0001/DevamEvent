@@ -52,8 +52,8 @@
 //             const config = { headers: { Authorization: `Bearer ${token}` } };
 
 //             const [plansRes, itemsRes] = await Promise.all([
-//                 axios.get('http://localhost:5000/api/pricing/admin', config),
-//                 axios.get('http://localhost:5000/api/decoration/admin', config)
+//                 axios.get(`${API_URL}/pricing/admin`, config),
+//                 axios.get(`${API_URL}/decoration/admin`, config)
 //             ]);
             
 //             setPlans(plansRes.data);
@@ -144,14 +144,14 @@
 
 //             if (editingPlan) {
 //                 await axios.put(
-//                     `http://localhost:5000/api/pricing/${editingPlan._id}`, 
+//                     `${API_URL}/pricing/${editingPlan._id}`, 
 //                     planData, 
 //                     config
 //                 );
 //                 showMessage('Plan updated successfully!', 'success');
 //             } else {
 //                 await axios.post(
-//                     'http://localhost:5000/api/pricing', 
+//                     `${API_URL}/pricing`, 
 //                     planData, 
 //                     config
 //                 );
@@ -197,7 +197,7 @@
 //         if (window.confirm('Are you sure you want to delete this plan?')) {
 //             try {
 //                 const token = localStorage.getItem('adminToken');
-//                 await axios.delete(`http://localhost:5000/api/pricing/${id}`, {
+//                 await axios.delete(`${API_URL}/pricing/${id}`, {
 //                     headers: { Authorization: `Bearer ${token}` }
 //                 });
 //                 showMessage('Plan deleted successfully!', 'success');
@@ -270,14 +270,14 @@
     
 //             if (editingItem) {
 //                 await axios.put(
-//                     `http://localhost:5000/api/decoration/${editingItem._id}`, 
+//                     `${API_URL}/decoration/${editingItem._id}`, 
 //                     itemForm, 
 //                     config
 //                 );
 //                 showMessage('Item updated successfully!', 'success');
 //             } else {
 //                 await axios.post(
-//                     'http://localhost:5000/api/decoration', 
+//                     `${API_URL}/decoration`, 
 //                     itemForm, 
 //                     config
 //                 );
@@ -319,7 +319,7 @@
 //         if (window.confirm('Are you sure you want to delete this item?')) {
 //             try {
 //                 const token = localStorage.getItem('adminToken');
-//                 await axios.delete(`http://localhost:5000/api/decoration/${id}`, {
+//                 await axios.delete(`${API_URL}/decoration/${id}`, {
 //                     headers: { Authorization: `Bearer ${token}` }
 //                 });
 //                 showMessage('Item deleted successfully!', 'success');
@@ -783,7 +783,7 @@ const AdminPricing = () => {
     const [message, setMessage] = useState({ text: '', type: '' });
     const [selectedCategory, setSelectedCategory] = useState('all');
     const [expandedPlans, setExpandedPlans] = useState({});
-
+    const API_URL = process.env.REACT_APP_API_URL;
     // Plan Form State
     const [planForm, setPlanForm] = useState({
         name: 'Basic',
@@ -823,8 +823,8 @@ const AdminPricing = () => {
             const config = { headers: { Authorization: `Bearer ${token}` } };
 
             const [plansRes, itemsRes] = await Promise.all([
-                axios.get('http://localhost:5000/api/pricing/admin', config),
-                axios.get('http://localhost:5000/api/decoration/admin', config)
+                axios.get(`${API_URL}/pricing/admin`, config),
+                axios.get(`${API_URL}/decoration/admin`, config)
             ]);
             
             setPlans(plansRes.data);
@@ -959,14 +959,14 @@ const AdminPricing = () => {
             if (editingPlan) {
                 console.log('5️⃣ Updating plan ID:', editingPlan._id);
                 response = await axios.put(
-                    `http://localhost:5000/api/pricing/${editingPlan._id}`, 
+                    `${API_URL}/pricing/${editingPlan._id}`, 
                     planData, 
                     config
                 );
             } else {
                 console.log('5️⃣ Creating new plan');
                 response = await axios.post(
-                    'http://localhost:5000/api/pricing', 
+                    `${API_URL}/pricing`, 
                     planData, 
                     config
                 );
@@ -1023,7 +1023,7 @@ const AdminPricing = () => {
         if (window.confirm('Are you sure you want to delete this plan?')) {
             try {
                 const token = localStorage.getItem('adminToken');
-                await axios.delete(`http://localhost:5000/api/pricing/${id}`, {
+                await axios.delete(`${API_URL}/pricing/${id}`, {
                     headers: { Authorization: `Bearer ${token}` }
                 });
                 showMessage('Plan deleted successfully!', 'success');
@@ -1096,14 +1096,14 @@ const AdminPricing = () => {
     
             if (editingItem) {
                 await axios.put(
-                    `http://localhost:5000/api/decoration/${editingItem._id}`, 
+                    `${API_URL}/decoration/${editingItem._id}`, 
                     itemForm, 
                     config
                 );
                 showMessage('Item updated successfully!', 'success');
             } else {
                 await axios.post(
-                    'http://localhost:5000/api/decoration', 
+                    `${API_URL}/decoration`, 
                     itemForm, 
                     config
                 );
@@ -1144,7 +1144,7 @@ const AdminPricing = () => {
         if (window.confirm('Are you sure you want to delete this item?')) {
             try {
                 const token = localStorage.getItem('adminToken');
-                await axios.delete(`http://localhost:5000/api/decoration/${id}`, {
+                await axios.delete(`${API_URL}/decoration/${id}`, {
                     headers: { Authorization: `Bearer ${token}` }
                 });
                 showMessage('Item deleted successfully!', 'success');

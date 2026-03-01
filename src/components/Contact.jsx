@@ -13,7 +13,7 @@ const Contact = () => {
     });
     const [message, setMessage] = useState({ text: '', type: '' });
     const [loading, setLoading] = useState(false);
-
+    const API_URL = process.env.REACT_APP_API_URL;
     const handleChange = (e) => {
         let value = e.target.value;
         if (e.target.id === 'phone') {
@@ -48,7 +48,7 @@ const Contact = () => {
         }
 
         try {
-            const response = await axios.post('http://localhost:5000/api/contact', formData);
+            const response = await axios.post(`${API_URL}/contact`, formData);
             
             if (response.data.success) {
                 setMessage({ text: '✨ Thank you! We will contact you soon.', type: 'success' });

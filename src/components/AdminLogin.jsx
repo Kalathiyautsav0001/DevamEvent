@@ -11,7 +11,7 @@ const AdminLogin = ({ onLogin }) => {
     const [error, setError] = useState('');
     const [loading, setLoading] = useState(false);
     const navigate = useNavigate();
-
+    const API_URL = process.env.REACT_APP_API_URL;
     const handleChange = (e) => {
         setCredentials({
             ...credentials,
@@ -25,7 +25,7 @@ const AdminLogin = ({ onLogin }) => {
         setError('');
 
         try {
-            const response = await axios.post('http://localhost:5000/api/admin/login', credentials);
+            const response = await axios.post(`${API_URL}/admin/login`, credentials);
             
             if (response.data.success) {
                 // Store token
